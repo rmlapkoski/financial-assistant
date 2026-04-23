@@ -6,8 +6,8 @@ async function bootstrap() {
 
   try {
     await app.listen({
-      port: env.PORT,
-      host: env.HOST,
+      port: Number(env.PORT) || 3000,
+      host: env.HOST || '0.0.0.0',
     });
   } catch (error) {
     app.log.error(error, 'falha ao inicializar');

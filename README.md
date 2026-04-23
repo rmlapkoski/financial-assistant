@@ -27,27 +27,33 @@ O projeto segue princípios de Separation of Concerns para facilitar a futura in
 ## 🛠️ Como Executar
 
 ### Pré-requisitos
+
 - Node.js v24 ou superior
 - NPM
 
 ### Instalação
+
 ```bash
 npm install
 ```
 
 ### Desenvolvimento
+
 ```bash
 npm run dev
 ```
+
 A API estará disponível em `http://localhost:3333`. A documentação Swagger pode ser acessada em `/docs`.
 
 ### Testes
+
 ```bash
 # Executa todos os testes E2E
 npm run test
 ```
 
 ### Produção (Build & Start)
+
 ```bash
 npm run build
 npm run start

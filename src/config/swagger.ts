@@ -14,6 +14,10 @@ export const swaggerOptions: FastifyDynamicSwaggerOptions = {
         url: 'http://localhost:3333',
         description: 'Servidor Local',
       },
+      {
+        url: 'https://financial-assistant-vclb.onrender.com',
+        description: 'Servidor Render',
+      },
     ],
   },
   transform: jsonSchemaTransform,

@@ -35,8 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Render
-        uses: sws2dp/render-deploy-action@v1.6.0
+        uses: JorgeLNJunior/render-deploy@v1.5.0
         with:
-          serviceId: ${{ secrets.RENDER_SERVICE_ID }}
-          apiKey: ${{ secrets.RENDER_API_KEY }}
-          waitDeploy: true
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          clear_cache: false
+          wait_deploy: true

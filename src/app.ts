@@ -1,0 +1,45 @@
+import cors from '@fastify/cors';
+import swagger from '@fastify/swagger';
+import swaggerUi from '@fastify/swagger-ui';
+import fastify from 'fastify';
+import {
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from 'fastify-type-provider-zod';
+
+import { swaggerOptions, swaggerUiOptions } from '@/config/swagger';
+import z from 'zod';
+
+export async function buildApp() {
+  const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
+
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+
+  await app.register(cors, { origin: true });
+
+  await app.register(swagger, swaggerOptions);
+  await app.register(swaggerUi, swaggerUiOptions);
+
+  app.get('/', { schema: { hide: true } }, async (_, reply) => {
+    return reply.redirect('/docs');
+  });
+
+  app.post(
+    '/chat',
+    {
+      schema: {
+        body: z.object({
+          message: z.string(),
+        }),
+      },
+    },
+    async (request, reply) => {
+      const { message } = request.body;
+      return reply.send({ message });
+    },
+  );
+
+  return app;
+}

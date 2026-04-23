@@ -1,28 +1,37 @@
 # Financial Assistant API
 
-API de controle financeiro desenvolvida com **Node.js**, **Fastify** e **TypeScript**, focada em validação de dados e processamento de interações.
+API de assistente financeiro inteligente desenvolvida com **Node.js**, **Fastify** e **TypeScript**, utilizando **LangGraph** para orquestração de agentes de IA.
 
 ## 🚀 Tecnologias
 
 - **Runtime**: Node.js v24+
 - **Framework**: [Fastify](https://www.fastify.io/)
+- **AI Orchestration**: [LangGraph](https://langchain-ai.github.io/langgraphjs/) & [LangChain](https://js.langchain.com/)
 - **Linguagem**: TypeScript
 - **Validação**: [Zod](https://zod.dev/)
 - **Documentação**: Swagger (OpenAPI 3.0)
 - **Testes**: Node.js Native Test Runner + TSX
 - **CI/CD**: GitHub Actions + Render
 
-## 🏗️ Arquitetura
+## 🏗️ Arquitetura de IA (LangGraph)
 
-O projeto segue princípios de Separation of Concerns para facilitar a futura integração com persistência:
+O núcleo da inteligência da aplicação é baseado em um Grafo de Estados, permitindo um fluxo de conversa dinâmico e extensível:
 
-- `src/app.ts`: Fábrica da aplicação e configuração de plugins.
-- `src/server.ts`: Ponto de entrada e inicialização do servidor.
-- `src/routes/`: Definição das rotas e endpoints.
-- `src/controllers/`: Lógica de orquestração das requisições.
-- `src/schemas/`: Validação de dados e contratos da API com Zod.
-- `src/config/`: Configurações globais (Swagger, etc).
-- `tests/`: Testes de Ponta a Ponta (E2E) com o runner nativo do Node.
+- **StateSchema**: Define o estado compartilhado entre os nós (`messages`, `output`, `command`).
+- **Nós (Nodes)**:
+  - `identifyIntent`: Analisa a mensagem do usuário para identificar a intenção (ex: registrar transação).
+  - `registerTransaction`: Lógica para processar o registro de finanças.
+  - `fallback`: Resposta padrão para comandos não identificados.
+  - `chatResponse`: Formata e envia a resposta final da IA.
+- **Arestas Condicionais**: Direcionam o fluxo com base na intenção identificada.
+
+## 📁 Estrutura de Pastas
+
+- `src/graph/`: Definição do grafo, estados e lógica do agente.
+  - `src/graph/nodes/`: Implementação individual de cada passo do pensamento da IA.
+- `src/routes/`: Endpoints da API.
+- `src/controllers/`: Ponte entre as requisições HTTP e a execução do Grafo de IA.
+- `tests/`: Testes E2E que validam o comportamento do agente.
 
 ## 🛠️ Como Executar
 
@@ -37,32 +46,31 @@ O projeto segue princípios de Separation of Concerns para facilitar a futura in
 npm install
 ```
 
-### Desenvolvimento
+### Desenvolvimento (API)
 
 ```bash
 npm run dev
 ```
 
-A API estará disponível em `http://localhost:3333`. A documentação Swagger pode ser acessada em `/docs`.
+A API estará disponível em `http://localhost:3333`.
+
+### Desenvolvimento Visual (LangGraph Studio)
+
+Para visualizar e testar o grafo interativamente:
+
+```bash
+npm run langgraph:serve
+```
 
 ### Testes
 
 ```bash
-# Executa todos os testes E2E
 npm run test
-```
-
-### Produção (Build & Start)
-
-```bash
-npm run build
-npm run start
 ```
 
 ## 🔄 Fluxo de CI/CD
 
-O projeto possui uma esteira automatizada no GitHub Actions (`.github/workflows/ci-cd.yml`):
+O projeto utiliza GitHub Actions para garantir a qualidade:
 
-1. **Lint & Build**: Verifica a sintaxe e tipos do código.
-2. **Testes E2E**: Roda a suíte de testes completa.
-3. **Deploy Automático**: Se os testes passarem na branch `master`, um sinal é enviado ao **Render** para iniciar o deploy. O GitHub aguarda a confirmação de sucesso do Render para finalizar o pipeline.
+1. **Testes E2E**: Garante que o Agente de IA está respondendo corretamente às intenções.
+2. **Deploy**: Deploy automático no Render após aprovação em `master`.

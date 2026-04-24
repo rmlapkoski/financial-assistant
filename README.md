@@ -72,5 +72,6 @@ npm run test
 
 O projeto utiliza GitHub Actions para garantir a qualidade:
 
-1. **Testes E2E**: Garante que o Agente de IA está respondendo corretamente às intenções.
-2. **Deploy**: Deploy automático no Render após aprovação em `master`.
+1. **Lint & Build**: Validação de código e tipos.
+2. **Testes E2E**: Garante que o Agente de IA está respondendo corretamente às intenções.
+3. **Deploy**: Deploy automático no Render após aprovação em `master`.

@@ -1,6 +1,7 @@
-import { buildApp } from '@/app';
 import assert from 'assert';
 import { test } from 'node:test';
+
+import { buildApp } from '@/app';
 
 test("deve criar uma interação com o chat e retornar status 200 com a mensagem 'registrar transação'", async () => {
   const app = await buildApp();

@@ -1,11 +1,12 @@
-import z from 'zod';
+import { END, MessagesZodMeta, START, StateGraph } from '@langchain/langgraph';
 import { withLangGraph } from '@langchain/langgraph/zod';
 import { BaseMessage } from 'langchain';
-import { END, MessagesZodMeta, START, StateGraph } from '@langchain/langgraph';
-import { identifyIntent } from './nodes/identifyIntentNode';
-import { chatResponseNode } from './nodes/chatResponseNode';
-import { registerTransactionNode } from './nodes/registerTransactionNode';
-import { fallbackNode } from './nodes/fallbackNode';
+import z from 'zod';
+
+import { chatResponseNode } from '@/graph/nodes/chatResponseNode';
+import { fallbackNode } from '@/graph/nodes/fallbackNode';
+import { identifyIntent } from '@/graph/nodes/identifyIntentNode';
+import { registerTransactionNode } from '@/graph/nodes/registerTransactionNode';
 
 const GraphState = z.object({
   messages: withLangGraph(z.custom<BaseMessage[]>(), MessagesZodMeta),

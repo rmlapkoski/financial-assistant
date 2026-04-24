@@ -1,7 +1,8 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { chatSchema } from '@/schemas/chat.schema';
-import { buildGraph } from '@/graph/graph';
 import { HumanMessage } from 'langchain';
+
+import { buildGraph } from '@/graph/graph';
+import { chatSchema } from '@/schemas/chat.schema';
 
 export class ChatController {
   private graph = buildGraph();

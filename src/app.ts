@@ -9,7 +9,7 @@ import {
 } from 'fastify-type-provider-zod';
 
 import { swaggerOptions, swaggerUiOptions } from '@/config/swagger';
-import { chatRoutes } from './routes/chat.router';
+import { chatRoutes } from '@/routes/chat.router';
 
 export async function buildApp() {
   const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();

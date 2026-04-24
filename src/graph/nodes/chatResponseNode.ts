@@ -1,5 +1,6 @@
 import { AIMessage } from 'langchain';
-import { type GraphState } from '@/graph/graph.ts';
+
+import { type GraphState } from '@/graph/graph';
 
 export function chatResponseNode(state: GraphState): GraphState {
   const responseText = state.output;

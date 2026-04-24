@@ -1,7 +1,8 @@
-import { env } from '@/config/env';
 import type { FastifyDynamicSwaggerOptions } from '@fastify/swagger';
 import type { FastifySwaggerUiOptions } from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
+
+import { env } from '@/config/env';
 
 const server =
   env.NODE_ENV === 'production'

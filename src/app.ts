@@ -9,7 +9,7 @@ import {
 } from 'fastify-type-provider-zod';
 
 import { swaggerOptions, swaggerUiOptions } from '@/config/swagger';
-import z from 'zod';
+import { chatRoutes } from '@/routes/chat.router';
 
 export async function buildApp() {
   const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
@@ -26,20 +26,7 @@ export async function buildApp() {
     return reply.redirect('/docs');
   });
 
-  app.post(
-    '/chat',
-    {
-      schema: {
-        body: z.object({
-          message: z.string(),
-        }),
-      },
-    },
-    async (request, reply) => {
-      const { message } = request.body;
-      return reply.send({ message });
-    },
-  );
+  app.register(chatRoutes, { prefix: '/chat' });
 
   return app;
 }

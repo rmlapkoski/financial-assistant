@@ -1,10 +1,19 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { HumanMessage } from 'langchain';
+
+import { buildGraph } from '@/graph/graph';
 import { chatSchema } from '@/schemas/chat.schema';
 
 export class ChatController {
+  private graph = buildGraph();
+
   handleInteraction = async (request: FastifyRequest, reply: FastifyReply) => {
     const data = chatSchema.parse(request.body);
 
-    return reply.status(201).send(data);
+    const result = await this.graph.invoke({
+      messages: [new HumanMessage({ content: data.message })],
+    });
+
+    return reply.status(200).send(result.output);
   };
 }

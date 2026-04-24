@@ -1,7 +1,8 @@
-import { ChatController } from '@/controllers/chat.controller';
-import { chatSchema } from '@/schemas/chat.schema';
 import type { FastifyInstance } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
+
+import { ChatController } from '@/controllers/chat.controller';
+import { chatSchema } from '@/schemas/chat.schema';
 
 export async function chatRoutes(app: FastifyInstance) {
   const controller = new ChatController();

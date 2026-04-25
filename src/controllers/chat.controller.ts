@@ -1,8 +1,8 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { HumanMessage } from 'langchain';
 
-import { buildGraph } from '@/graph/graph';
 import { chatSchema } from '@/schemas/chat.schema';
+import { buildGraph } from '@/graph/factory';
 
 export class ChatController {
   private graph = buildGraph();
@@ -14,6 +14,6 @@ export class ChatController {
       messages: [new HumanMessage({ content: data.message })],
     });
 
-    return reply.status(200).send(result.output);
+    return reply.status(200).send(result.intent);
   };
 }

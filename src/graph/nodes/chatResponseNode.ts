@@ -1,13 +1,10 @@
 import { AIMessage } from 'langchain';
-
 import { type GraphState } from '@/graph/graph';
 
-export function chatResponseNode(state: GraphState): GraphState {
-  const responseText = state.output;
-  const aiMessage = new AIMessage(responseText);
-
+export async function chatResponseNode(
+  state: GraphState,
+): Promise<Partial<GraphState>> {
   return {
-    ...state,
-    messages: [...state.messages, aiMessage],
+    messages: [...state.messages, new AIMessage(state.intent!)],
   };
 }

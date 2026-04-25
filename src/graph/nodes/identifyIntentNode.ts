@@ -1,18 +1,44 @@
 import { type GraphState } from '@/graph/graph';
+import {
+  getSystemPrompt,
+  getUserPromptTemplate,
+  IntentSchema,
+} from '@/prompts/identifyIntent';
+import { OpenRouterService } from '@/services/openRouterService';
 
-export function identifyIntent(state: GraphState): GraphState {
-  const input = state.messages.at(-1)?.text ?? '';
-  const inputLower = input.toLowerCase();
+export function identifyIntent(llmCLient: OpenRouterService) {
+  return async (state: GraphState): Promise<Partial<GraphState>> => {
+    const input = state.messages.at(-1)!.text;
 
-  let command: GraphState['command'] = 'unknown';
+    try {
+      const systemPrompt = getSystemPrompt();
+      const userPrompt = getUserPromptTemplate(input);
+      const result = await llmCLient.generateStructured(
+        systemPrompt,
+        userPrompt,
+        IntentSchema,
+      );
+      if (!result.success) {
+        return {
+          intent: 'unknown',
+          error: result.error,
+        };
+      }
 
-  if (inputLower.includes('registrar') || inputLower.includes('cadastrar')) {
-    command = 'register';
-  }
+      const intentData = result.data!;
 
-  return {
-    ...state,
-    command,
-    output: input,
+      return {
+        ...intentData,
+      };
+    } catch (error) {
+      return {
+        ...state,
+        intent: 'unknown',
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Intent identification failed',
+      };
+    }
   };
 }

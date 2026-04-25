@@ -9,7 +9,8 @@ export function fallbackNode(state: GraphState): GraphState {
 
   return {
     ...state,
-    output: fallbackMessage,
-    messages: [...state.messages],
+    actionSuccess: false,
+    actionError: true,
+    error: fallbackMessage,
   };
 }

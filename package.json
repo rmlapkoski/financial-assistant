@@ -15,7 +15,6 @@
     "test": "tsx --test tests/**/*.e2e.test.ts",
     "test:ci": "tsx --test tests/*.e2e.test.ts",
     "langgraph:serve": "npx @langchain/langgraph-cli@latest dev"
-
   },
   "keywords": [],
   "author": "",
@@ -25,6 +24,7 @@
     "@fastify/swagger": "^9.7.0",
     "@fastify/swagger-ui": "^5.2.5",
     "@langchain/core": "^1.1.41",
+    "@langchain/openai": "^1.4.4",
     "@types/pg": "^8.20.0",
     "dotenv": "^17.4.1",
     "fastify": "^5.8.4",

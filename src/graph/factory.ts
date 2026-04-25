@@ -1,5 +1,11 @@
-import { buildGraph } from '@/graph/graph';
+import { buildFinancialAssistantGraph } from '@/graph/graph';
+import { OpenRouterService } from '@/services/openRouterService';
 
-export const graph = () => {
+export function buildGraph() {
+  const llmClient = new OpenRouterService();
+  return buildFinancialAssistantGraph(llmClient);
+}
+
+export const graph = async () => {
   return buildGraph();
 };

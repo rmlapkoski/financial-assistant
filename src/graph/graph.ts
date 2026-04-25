@@ -7,20 +7,24 @@ import { chatResponseNode } from '@/graph/nodes/chatResponseNode';
 import { fallbackNode } from '@/graph/nodes/fallbackNode';
 import { identifyIntent } from '@/graph/nodes/identifyIntentNode';
 import { registerTransactionNode } from '@/graph/nodes/registerTransactionNode';
+import { OpenRouterService } from '@/services/openRouterService';
 
 const GraphState = z.object({
   messages: withLangGraph(z.custom<BaseMessage[]>(), MessagesZodMeta),
-  output: z.string(),
-  command: z.enum(['register', 'unknown']),
+  intent: z.enum(['register', 'unknown']),
+  actionSuccess: z.boolean().optional(),
+  actionError: z.boolean().optional(),
+
+  error: z.string().optional(),
 });
 
 export type GraphState = z.infer<typeof GraphState>;
 
-export function buildGraph() {
+export function buildFinancialAssistantGraph(llmCLient: OpenRouterService) {
   const workflow = new StateGraph({
     stateSchema: GraphState,
   })
-    .addNode('identifyIntent', identifyIntent)
+    .addNode('identifyIntent', identifyIntent(llmCLient))
     .addNode('registerTransaction', registerTransactionNode)
     .addNode('fallback', fallbackNode)
     .addNode('chatResponse', chatResponseNode)
@@ -29,15 +33,14 @@ export function buildGraph() {
     .addConditionalEdges(
       'identifyIntent',
       (state: GraphState) => {
-        switch (state.command) {
-          case 'register':
-            return 'registerTransaction';
-          default:
-            return 'fallback';
+        if (state.error || !state.intent || state.intent === 'unknown') {
+          return 'fallback';
         }
+
+        return state.intent;
       },
       {
-        registerTransaction: 'registerTransaction',
+        register: 'registerTransaction',
         fallback: 'fallback',
       },
     )

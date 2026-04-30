@@ -10,35 +10,23 @@ export function identifyIntent(llmCLient: OpenRouterService) {
   return async (state: GraphState): Promise<Partial<GraphState>> => {
     const input = state.messages.at(-1)!.text;
 
-    try {
-      const systemPrompt = getSystemPrompt();
-      const userPrompt = getUserPromptTemplate(input);
-      const result = await llmCLient.generateStructured(
-        systemPrompt,
-        userPrompt,
-        IntentSchema,
-      );
-      if (!result.success) {
-        return {
-          intent: 'unknown',
-          error: result.error,
-        };
-      }
+    const systemPrompt = getSystemPrompt();
+    const userPrompt = getUserPromptTemplate(input);
+    const result = await llmCLient.generateStructured(
+      systemPrompt,
+      userPrompt,
+      IntentSchema,
+    );
 
-      const intentData = result.data!;
-
+    if (!result.success) {
       return {
-        ...intentData,
-      };
-    } catch (error) {
-      return {
-        ...state,
         intent: 'unknown',
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Intent identification failed',
+        error: result.error,
       };
     }
+
+    return {
+      ...result.data!,
+    };
   };
 }

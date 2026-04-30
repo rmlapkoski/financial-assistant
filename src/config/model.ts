@@ -23,7 +23,7 @@ export const config: ModelConfig = {
   apiKey: process.env.OPENROUTER_API_KEY!,
   httpReferer: '',
   xTitle: 'IA Devs - Prompt Chaining Article Generator',
-  models: ['openai/sora-2-pro', 'nvidia/nemotron-3-nano-30b-a3b:free'],
+  models: ['nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'],
   provider: {
     sort: {
       by: 'throughput',

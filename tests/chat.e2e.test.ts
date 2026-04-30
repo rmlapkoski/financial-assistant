@@ -3,9 +3,9 @@ import { test } from 'node:test';
 
 import { buildApp } from '@/app';
 
-test("deve criar uma interação com o chat e retornar status 200 com a mensagem 'registrar transação'", async () => {
+test('deve criar uma interação com o chat e retornar status 200 e intenção ser register', async () => {
   const app = await buildApp();
-  const msg = 'Cadastrar compra feita hoje no valor de 10 reais';
+  const msg = 'adicionar compra';
 
   const response = await app.inject({
     method: 'POST',
@@ -14,12 +14,13 @@ test("deve criar uma interação com o chat e retornar status 200 com a mensagem
   });
 
   assert.equal(response.statusCode, 200);
-  assert.equal(response.body, 'registrar transação');
+  const { intent } = response.json();
+  assert.equal(intent, 'register');
 });
 
-test("deve criar uma interação com o chat e retornar status 200 com a mensagem informando que não conseguiu identificar a intenção'", async () => {
+test('deve criar uma interação com o chat e retornar status 200 e intenção ser unknown', async () => {
   const app = await buildApp();
-  const msg = 'Olá chat';
+  const msg = 'Que dia é hoje?';
 
   const response = await app.inject({
     method: 'POST',
@@ -28,8 +29,6 @@ test("deve criar uma interação com o chat e retornar status 200 com a mensagem
   });
 
   assert.equal(response.statusCode, 200);
-  assert.equal(
-    response.body,
-    "Comando não identificado, tente algo como 'registrar gasto de 10 reais' ou 'cadastrar gasto de 10 reais'",
-  );
+  const { intent } = response.json();
+  assert.equal(intent, 'unknown');
 });

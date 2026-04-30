@@ -17,6 +17,25 @@ export async function buildApp() {
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
 
+  app.setErrorHandler((error, request, reply) => {
+    app.log.error(error as Error);
+
+    const fastifyError = error as { validation?: any; statusCode?: number };
+
+    if (fastifyError.validation) {
+      return reply.status(400).send({
+        message: 'Erro de validação',
+        errors: fastifyError.validation,
+      });
+    }
+
+    const typedError = error as Error & { statusCode?: number };
+
+    return reply.status(typedError.statusCode || 500).send({
+      message: typedError.message || 'Erro interno do servidor',
+    });
+  });
+
   await app.register(cors, { origin: true });
 
   await app.register(swagger, swaggerOptions);

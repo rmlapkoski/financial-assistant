@@ -1,11 +1,12 @@
 import { ChatOpenAI } from '@langchain/openai';
-import { z } from 'zod';
 import {
   createAgent,
   HumanMessage,
   providerStrategy,
   SystemMessage,
 } from 'langchain';
+import { z } from 'zod';
+
 import { config, type ModelConfig } from '@/config/model';
 
 export class OpenRouterService {
